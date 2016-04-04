@@ -1,0 +1,35 @@
+version: '2'
+services:
+  nginx:
+    image: vanosg/rpi-brewpi-nginx
+    container_name: nginx
+    ports:
+        - "80:80"
+    hostname: nginx
+    restart: always
+
+  fpm:
+    image: vanosg/rpi-brewpi-fpm
+    container_name: fpm
+    volumes_from:
+        - nginx
+    hostname: fpm
+    restart: always
+
+  brewpi:
+    image: vanosg/rpi-brewpi:latest
+    container_name: brewpi
+    hostname: brewpi
+    restart: always
+    volumes_from:
+        - data
+
+  data:
+    image: vanosg/rpi-brewpi-data
+    container_name: data
+    hostname: data
+    restart: always
+
+networks:
+    default:
+      driver: bridge
